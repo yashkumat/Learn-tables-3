@@ -237,6 +237,7 @@
         if(window.speechSynthesis.speaking){
             utter_stop_button.style.display = 'none'
             utter_table_button.innerHTML = 'Read'
+            utter_stop_button.innerHTML = 'Pause'
             window.speechSynthesis.cancel()
         }else{
             utter_table_button.innerHTML = 'Stop'
