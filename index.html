@@ -88,6 +88,7 @@
         }
 
         #get_result_button{
+            display: none;
             border: none;
             color: #B78240;
             background-color: #497959;
@@ -115,7 +116,7 @@
             color: #E8E8E8;
         }
 
-        #utter_stop_button{
+        .utter_stop_button{
             display: none;
             border: none;
             color: #B78240;
@@ -124,7 +125,7 @@
 
         }
 
-        #utter_stop_button:hover{
+        .utter_stop_button:hover{
             background-color: #B78240;
             color: #E8E8E8;
         }
@@ -142,6 +143,10 @@
         #speak_button:hover{
             background-color: #B78240;
             color: #E8E8E8;
+        }
+
+        .get_result_option_buttons{
+            display: flex;
         }
 
         @keyframes flip {
@@ -171,8 +176,8 @@
     <div class="container">
         <span class="title">Learn table Of</span>
         <div class="input-container">
-            <input type="text" name="table_of" placeholder="Enter a number" onkeypress="validate_input(event)" id="table_of">
-            <span>
+            <input type="text" name="table_of" placeholder="Type or Speak" onkeypress="validate_input(event)" id="table_of">
+            <span class="get_result_option_buttons">
                 <button id="speak_button" onclick="speak()">&#127908;</button>
                 <button id="get_result_button" onclick="get_result()">Get Result</button>
             </span>
@@ -182,7 +187,8 @@
             </ul>
             <div class="result-container-controller">
                 <button id="utter_table_button" onclick="utter_table()">Read</button>
-                <button id="utter_stop_button" onclick="utter_stop()">Pause</button>
+                <button class="utter_stop_button" id="utter_pause_button" onclick="utter_pause()">Pause</button>
+                <button class="utter_stop_button" id="utter_resume_button" onclick="utter_resume()">Resume</button>
             </div>
         </div>
     </div>
@@ -226,22 +232,28 @@
         clear_table()
 
         var charCode = (evt.which) ? evt.which : evt.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
+        if (charCode > 31 && (charCode < 48 || charCode > 57)){
             evt.preventDefault();
+        }else{
+            document.getElementById('get_result_button').style.display = "block"
+        }
+            
+
     }
 
     function utter_table(){
-        let utter_stop_button = document.getElementById("utter_stop_button")
         let utter_table_button = document.getElementById("utter_table_button")
+        let utter_pause_button = document.getElementById("utter_pause_button")
+        let utter_resume_button = document.getElementById("utter_resume_button")
+        utter_pause_button.style.display = 'block'
 
         if(window.speechSynthesis.speaking){
-            utter_stop_button.style.display = 'none'
             utter_table_button.innerHTML = 'Read'
-            utter_stop_button.innerHTML = 'Pause'
+            utter_pause_button.style.display = 'none'
+            utter_resume_button.style.display = 'none'
             window.speechSynthesis.cancel()
         }else{
             utter_table_button.innerHTML = 'Stop'
-            utter_stop_button.style.display = 'block'
 
             let speech = new SpeechSynthesisUtterance();
 
@@ -251,30 +263,24 @@
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
-                       message += " " + number + " " + index+"'s are "+ (number * index) + ". "
+                       message += " " + number + " " + index+"'s are "+ (number * index) + " . "
                 }
                 speech.text = message
                 window.speechSynthesis.speak(speech);
         }
     }
 
-    function utter_stop(){
-        let utter_stop_button = document.getElementById("utter_stop_button")
+    function utter_pause(){
+        window.speechSynthesis.pause();
+        document.getElementById('utter_resume_button').style.display = 'block'
+        document.getElementById('utter_pause_button').style.display = 'none'
 
-        if(window.speechSynthesis.speaking){
-            window.speechSynthesis.pause();
-            utter_stop_button.innerText = "Resume";
-        }
+    }
 
-        if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-            utter_stop_button.innerText = "Pause";
-        } 
-
-        if(window.speechSynthesis.resumed){
-            window.speechSynthesis.pause();
-            utter_stop_button.innerText = "Resume";
-        }
+    function utter_resume(){
+        window.speechSynthesis.resume();
+        document.getElementById('utter_pause_button').style.display = 'block'
+        document.getElementById('utter_resume_button').style.display = 'none'
     }
 
     function speak(){
@@ -282,6 +288,8 @@
         clear_table()
 
         var table_of =  document.getElementById("table_of")
+
+        document.getElementById('get_result_button').style.display = "none"
 
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -316,11 +324,8 @@
         var table_result_container = document.getElementById('result-container')
         table_result_container.style.display = "none"
 
-        let utter_stop_button = document.getElementById("utter_stop_button")
         let utter_table_button = document.getElementById("utter_table_button")
 
-        utter_stop_button.style.display = "none"
-        utter_stop_button.innerHTML = "Pause"
         utter_table_button.innerHTML = "Read"
     }
 </script>
