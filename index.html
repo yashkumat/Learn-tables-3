@@ -157,6 +157,13 @@
             .title{
                 font-size: 25px !important;
             }
+            .input-container{
+                width: 90vw;
+            }
+            .container{
+                width: 90%;
+                min-height: 90vh;
+            }
         }
     </style>
 </head>
@@ -195,6 +202,7 @@
         table_result.style.animation = 'flip 1s 1'
 
         if(number){
+            table_of.blur();
             setTimeout(()=>{
                 utter_table_button.style.display = 'block'
                 table_result.style.animation = ''
