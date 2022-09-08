@@ -176,7 +176,7 @@
     <div class="container">
         <span class="title">Learn table Of</span>
         <div class="input-container">
-            <input type="text" name="table_of" placeholder="Type or Speak" onkeypress="validate_input(event)" id="table_of">
+            <input type="text" name="table_of" placeholder="Type or Speak" onkeydown="validate_input(event)" id="table_of">
             <span class="get_result_option_buttons">
                 <button id="speak_button" onclick="speak()">&#127908;</button>
                 <button id="get_result_button" onclick="get_result()">Get Result</button>
@@ -231,8 +231,8 @@
             table_of.focus();
             return false
         }
-
     }
+
     function validate_input(evt){
 
         clear_table()
@@ -243,8 +243,6 @@
         }else{
             document.getElementById('get_result_button').style.display = "block"
         }
-            
-
     }
 
     function utter_table(){
