@@ -234,13 +234,12 @@
 
             let speech = new SpeechSynthesisUtterance();
 
-                speech.lang = "en-US";
+                speech.lang = "en-GB";
 
                 let table_of = document.getElementById('table_of')
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
-                       // message += number + " " + index+"'s are "+ (number * index) + "\n\n"
                        message += " " + parseInt(number) + " " + index+"'s are "+ parseInt(number * index) + "\n\n"
                 }
                 speech.text = message
