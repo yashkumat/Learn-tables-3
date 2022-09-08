@@ -240,7 +240,8 @@
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
-                       message += number + " " + index+"'s are "+ (number * index) + "\n\n"
+                       // message += number + " " + index+"'s are "+ (number * index) + "\n\n"
+                       message += parseInt(number) + " " + index+"'s are "+ parseInt(number * index) + "\n\n"
                 }
                 speech.text = message
                 window.speechSynthesis.speak(speech);
