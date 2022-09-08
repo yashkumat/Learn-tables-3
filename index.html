@@ -183,6 +183,9 @@
 <script>
 
     function get_result(){
+        
+        clear_table()
+
         var table_result_container = document.getElementById('result-container')
         table_result_container.style.display = "block"
         let table_of = document.getElementById('table_of')
@@ -209,6 +212,9 @@
 
     }
     function validate_input(evt){
+
+        clear_table()
+
         var charCode = (evt.which) ? evt.which : evt.keyCode
         if (charCode > 31 && (charCode < 48 || charCode > 57))
             evt.preventDefault();
@@ -220,7 +226,7 @@
 
         if(window.speechSynthesis.speaking){
             utter_stop_button.style.display = 'none'
-            utter_table_button.innerHTML = 'Start'
+            utter_table_button.innerHTML = 'Read'
             window.speechSynthesis.cancel()
         }else{
             utter_table_button.innerHTML = 'Stop'
@@ -228,13 +234,14 @@
 
             let speech = new SpeechSynthesisUtterance();
 
-                speech.lang = "en";
+                speech.lang = "en-GB";
+
 
                 let table_of = document.getElementById('table_of')
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
-                       message += parseInt(number) + " " + index+"'s are "+ parseInt(number * index) + "\n\n"
+                       message += parseInt(number).toLocaleString('en-GB') + " " + index+"'s are "+ parseInt(number * index).toLocaleString('en-GB') + "\n"
                 }
                 speech.text = message
                 window.speechSynthesis.speak(speech);
@@ -255,10 +262,9 @@
 
     function speak(){
 
-        var table_of =  document.getElementById("table_of")
-        var table_result_container = document.getElementById('result-container')
+        clear_table()
 
-        table_result_container.style.display = "none"
+        var table_of =  document.getElementById("table_of")
 
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -281,10 +287,24 @@
                 return false;
             }else{
                 table_of.value = transcript;
+                get_result()
                 recognition.stop();
             }
         });
     }
    
+    function clear_table(){
+        window.speechSynthesis.cancel()
+
+        var table_result_container = document.getElementById('result-container')
+        table_result_container.style.display = "none"
+
+        let utter_stop_button = document.getElementById("utter_stop_button")
+        let utter_table_button = document.getElementById("utter_table_button")
+
+        utter_stop_button.style.display = "none"
+        utter_stop_button.innerHTML = "Pause"
+        utter_table_button.innerHTML = "Read"
+    }
 </script>
 </html>
