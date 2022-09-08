@@ -263,7 +263,8 @@
             if (window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
                 utter_stop_button.innerText = "Pause";
-            } else {
+            } 
+            if(window.speechSynthesis.speaking) {
                 window.speechSynthesis.pause();
                 utter_stop_button.innerText = "Resume";
             }
