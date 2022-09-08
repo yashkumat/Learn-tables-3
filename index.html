@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="table.png" type="image/png" sizes="16x16">
+    <meta name="description" content="V3. with speech recognition and speech utter features for Kids to learn the  tables.">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Yash Kumat">
+    <meta property="og:title" content="Learn The Tables">
+    <meta property="og:type" content="game" />
+    <meta property="og:image" content="https://yashkumat.github.io/learn-table-2/table.png">
+    <meta property="og:url" content="https://yashkumat.github.io/learn-table-3/">
+    <title>Learn The Tables</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Walter+Turncoat);
+
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: "Walter Turncoat", cursive;
+            font-size: 30px;
+            color: #E8E8E8;
+        }
+
+        body {
+        background: -webkit-linear-gradient(90deg, #485563 10%, #29323c 90%);
+        background: -moz-linear-gradient(90deg, #485563 10%, #29323c 90%);
+        background: -ms-linear-gradient(90deg, #485563 10%, #29323c 90%);
+        background: -o-linear-gradient(90deg, #485563 10%, #29323c 90%);
+        background: linear-gradient(90deg, #485563 10%, #29323c 90%);
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 80%;
+            min-height: 80vh;
+            color: #E8E8E8;
+            background-color: #497959;
+            border-radius: 10px;
+            border: #B78240 solid 5px;
+        }
+
+        .input-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 80vw;
+            margin: 5px;
+        }
+
+        .result-container{
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        #table_of{
+            text-align: center;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #B78240;
+            height: auto;
+            width: 50%;
+        }
+
+        input:focus{
+            background-color: #B78240 !important;
+            outline: none;
+        }
+        input::placeholder{
+            color: rgba(40, 50, 60, 0.25);
+            font-size: 15px;
+        }
+
+        #get_result_button{
+            border: none;
+            color: #B78240;
+            background-color: #497959;
+        }
+
+        #get_result_button:hover{
+            background-color: #B78240;
+            color: #E8E8E8;
+        }
+
+        .table_result li{
+            list-style: none;
+        }
+
+        #utter_table_button{
+            display: none;
+            border: none;
+            color: #B78240;
+            background-color: #497959;
+            margin: 10px;
+        }
+
+        #utter_table_button:hover{
+            background-color: #B78240;
+            color: #E8E8E8;
+        }
+
+        #utter_stop_button{
+            display: none;
+            border: none;
+            color: #B78240;
+            background-color: #497959;
+            margin: 10px;
+
+        }
+
+        #utter_stop_button:hover{
+            background-color: #B78240;
+            color: #E8E8E8;
+        }
+
+        .result-container-controller{
+            display: flex;
+        }
+
+        @keyframes flip {
+            0%,80% {
+            transform: rotateY(360deg) 
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            *{
+                font-size: 20px !important;
+            }
+            .title{
+                font-size: 25px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="title">Learn table Of</span>
+        <div class="input-container">
+            <input type="text" name="table_of" placeholder="Enter a number" onkeydown="validate_input(event)" id="table_of">
+            <span>
+                <button id="get_result_button" onclick="speak()">&#127908;</button>
+                <button id="get_result_button" onclick="get_result()">Get Result</button>
+            </span>
+        </div>
+        <div class="result-container">
+            <ul class="table_result" id="table_result">
+            </ul>
+            <div class="result-container-controller">
+                <button id="utter_table_button" onclick="utter_table()">Read</button>
+                <button id="utter_stop_button" onclick="utter_stop()">Pause</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    function get_result(){
+        let table_of = document.getElementById('table_of')
+        let number = table_of.value
+        let utter_table_button = document.getElementById("utter_table_button")
+        let table_result = document.getElementById('table_result')
+        table_result.style.animation = 'flip 1s 1'
+
+        if(number){
+            setTimeout(()=>{
+                utter_table_button.style.display = 'block'
+                table_result.style.animation = ''
+                table_result.innerHTML = ""
+                for (let index = 1; index <= 10; index++) {
+                    const element = document.createElement('li')
+                    element.innerHTML = `${number} * ${index} = ${number * index}`
+                    table_result.appendChild(element)
+                }
+            },1000)
+        }else{
+            table_of.focus();
+            return false
+        }
+
+    }
+    function validate_input(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            evt.preventDefault();
+    }
+
+    function utter_table(){
+
+        let utter_stop_button = document.getElementById("utter_stop_button")
+        let utter_table_button = document.getElementById("utter_table_button")
+        utter_stop_button.style.display = 'block'
+
+
+        if(window.speechSynthesis.speaking){
+            utter_table_button.innerHTML = 'Start'
+            window.speechSynthesis.cancel()
+        }else{
+            utter_table_button.innerHTML = 'Stop'
+
+            let speech = new SpeechSynthesisUtterance();
+
+                // Set Speech Language
+                speech.lang = "en";
+
+                // Make message
+                let table_of = document.getElementById('table_of')
+                let number = table_of.value
+                let message = ""
+                for (let index = 1; index <= 10; index++) {
+                    message += `${number} ${index}'s are ${number * index}\n`
+                }
+                // Set the text property with the value of the textarea
+                speech.text = message
+                // Start Speaking
+                window.speechSynthesis.speak(speech);
+        }
+        
+
+        
+
+    }
+
+    function utter_stop(){
+
+        let utter_stop_button = document.getElementById("utter_stop_button")
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                utter_stop_button.innerText = "Pause";
+            } else {
+                window.speechSynthesis.pause();
+                utter_stop_button.innerText = "Resume";
+            }
+
+    }
+
+    function speak(){
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+        let table_of = document.getElementById('table_of')
+
+        recognition.addEventListener('result', event => {
+            const transcript = Array.from(event.results)
+            .map(result => result[0])
+            .map(result => result.transcript).join('');
+
+            if (isNaN(transcript)) 
+            {
+                alert("Must input numbers");
+                return false;
+            }
+
+            console.log(transcript)
+
+            table_of.value = transcript;
+        });
+        
+        recognition.start();
+        
+        recognition.addEventListener('end', recognition.start);
+    }
+   
+
+</script>
+</html>
