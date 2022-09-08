@@ -7,12 +7,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" href="table.png" type="image/png" sizes="50x50">
     <meta name="description" content="Help your kids to memorize tables with speech recognition and text read features. (Version 3)">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="keywords" content="HTML, CSS, JavaScript, SpeechRecognition, speechSynthesis">
     <meta name="author" content="Yash Kumat">
-    <meta property="og:title" content="Learn The Tables">
-    <meta property="og:type" content="game" />
+    <meta property="og:title" content="Learn Tables">
+    <meta property="og:type" content="educational" />
     <meta property="og:image" content="https://raw.githubusercontent.com/yashkumat/Learn-tables-3/main/table.png">
-    <meta property="og:url" content="https://yashkumat.github.io/learn-table-3/">
+    <meta property="og:url" content="https://yashkumat.github.io/memorize_tables/">
     <title>Learn Tables</title>
     <style>
         @import url(https://fonts.googleapis.com/css?family=Walter+Turncoat);
@@ -133,6 +133,17 @@
             display: flex;
         }
 
+        #speak_button{
+            border: none;
+            color: #B78240;
+            background-color: #497959;
+        }
+
+        #speak_button:hover{
+            background-color: #B78240;
+            color: #E8E8E8;
+        }
+
         @keyframes flip {
             0%,80% {
             transform: rotateY(360deg) 
@@ -155,11 +166,11 @@
         <div class="input-container">
             <input type="text" name="table_of" placeholder="Enter a number" onkeypress="validate_input(event)" id="table_of">
             <span>
-                <button id="get_result_button" onclick="speak()">&#127908;</button>
+                <button id="speak_button" onclick="speak()">&#127908;</button>
                 <button id="get_result_button" onclick="get_result()">Get Result</button>
             </span>
         </div>
-        <div class="result-container">
+        <div class="result-container" id="result-container">
             <ul class="table_result" id="table_result">
             </ul>
             <div class="result-container-controller">
@@ -172,6 +183,8 @@
 <script>
 
     function get_result(){
+        var table_result_container = document.getElementById('result-container')
+        table_result_container.style.display = "block"
         let table_of = document.getElementById('table_of')
         let number = table_of.value
         let utter_table_button = document.getElementById("utter_table_button")
@@ -221,7 +234,7 @@
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
-                    message += `${number} ${index}'s are ${number * index}\n`
+                    message += number.toLocaleString('en') + " " + index+"'s are "+ (number * index).toLocaleString('en') + "\n\n"
                 }
                 speech.text = message
                 window.speechSynthesis.speak(speech);
@@ -243,6 +256,9 @@
     function speak(){
 
         var table_of =  document.getElementById("table_of")
+        var table_result_container = document.getElementById('result-container')
+
+        table_result_container.style.display = "none"
 
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -252,7 +268,6 @@
 
         table_of.value = ""
         table_of.placeholder = 'Listening....'
-        console.log("on")
         recognition.addEventListener('result', event => {
             const transcript = Array.from(event.results)
                                     .map(result => result[0])
@@ -261,6 +276,7 @@
 
             if (isNaN(transcript)) 
             {
+                table_of.placeholder = 'Enter a number...'
                 alert("Must input numbers");
                 return false;
             }else{
