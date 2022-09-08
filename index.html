@@ -258,16 +258,17 @@
     }
 
     function utter_stop(){
-            let utter_stop_button = document.getElementById("utter_stop_button")
+        let utter_stop_button = document.getElementById("utter_stop_button")
 
+        if(window.speechSynthesis.speaking) {
             if (window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
                 utter_stop_button.innerText = "Pause";
-            } 
-            if(window.speechSynthesis.speaking) {
+            } else{
                 window.speechSynthesis.pause();
                 utter_stop_button.innerText = "Resume";
             }
+        }
     }
 
     function speak(){
