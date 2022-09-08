@@ -199,6 +199,12 @@
         
         clear_table()
 
+        let utter_pause_button = document.getElementById("utter_pause_button")
+        let utter_resume_button = document.getElementById("utter_resume_button")
+
+        utter_pause_button.style.display = 'none'
+        utter_resume_button.style.display = 'none'
+
         var table_result_container = document.getElementById('result-container')
         table_result_container.style.display = "block"
         let table_of = document.getElementById('table_of')
