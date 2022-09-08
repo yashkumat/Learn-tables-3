@@ -198,12 +198,13 @@
         let table_of = document.getElementById('table_of')
         let number = table_of.value
         let utter_table_button = document.getElementById("utter_table_button")
+        let speak_button = document.getElementById("speak_button")
         let table_result = document.getElementById('table_result')
         table_result.style.animation = 'flip 1s 1'
 
         if(number){
             table_of.blur();
-            utter_table_button.blur();
+            speak_button.blur();
             setTimeout(()=>{
                 utter_table_button.style.display = 'block'
                 table_result.style.animation = ''
