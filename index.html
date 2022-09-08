@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes" >
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" href="table.png" type="image/png" sizes="16x16">
-    <meta name="description" content="V3. with speech recognition and speech utter features for Kids to learn the  tables.">
+    <meta name="description" content="v3 with speech recognition and speech utter features that help Kids to memorize the tables.">
     <meta name="keywords" content="HTML, CSS, JavaScript">
     <meta name="author" content="Yash Kumat">
     <meta property="og:title" content="Learn The Tables">
@@ -153,7 +153,7 @@
     <div class="container">
         <span class="title">Learn table Of</span>
         <div class="input-container">
-            <input type="text" name="table_of" placeholder="Enter a number" onkeydown="validate_input(event)" id="table_of">
+            <input type="text" name="table_of" placeholder="Enter a number" onkeypress="validate_input(event)" id="table_of">
             <span>
                 <button id="get_result_button" onclick="speak()">&#127908;</button>
                 <button id="get_result_button" onclick="get_result()">Get Result</button>
@@ -202,44 +202,34 @@
     }
 
     function utter_table(){
-
         let utter_stop_button = document.getElementById("utter_stop_button")
         let utter_table_button = document.getElementById("utter_table_button")
-        utter_stop_button.style.display = 'block'
-
 
         if(window.speechSynthesis.speaking){
+            utter_stop_button.style.display = 'none'
             utter_table_button.innerHTML = 'Start'
             window.speechSynthesis.cancel()
         }else{
             utter_table_button.innerHTML = 'Stop'
+            utter_stop_button.style.display = 'block'
 
             let speech = new SpeechSynthesisUtterance();
 
-                // Set Speech Language
                 speech.lang = "en";
 
-                // Make message
                 let table_of = document.getElementById('table_of')
                 let number = table_of.value
                 let message = ""
                 for (let index = 1; index <= 10; index++) {
                     message += `${number} ${index}'s are ${number * index}\n`
                 }
-                // Set the text property with the value of the textarea
                 speech.text = message
-                // Start Speaking
                 window.speechSynthesis.speak(speech);
         }
-        
-
-        
-
     }
 
     function utter_stop(){
-
-        let utter_stop_button = document.getElementById("utter_stop_button")
+            let utter_stop_button = document.getElementById("utter_stop_button")
 
             if (window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
@@ -248,36 +238,37 @@
                 window.speechSynthesis.pause();
                 utter_stop_button.innerText = "Resume";
             }
-
     }
 
     function speak(){
+
+        var table_of =  document.getElementById("table_of")
+
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.interimResults = true;
-        let table_of = document.getElementById('table_of')
 
+        recognition.start();
+
+        table_of.value = ""
+        table_of.placeholder = 'Listening....'
+        console.log("on")
         recognition.addEventListener('result', event => {
             const transcript = Array.from(event.results)
-            .map(result => result[0])
-            .map(result => result.transcript).join('');
+                                    .map(result => result[0])
+                                    .map(result => result.transcript)
+                                    .join('');
 
             if (isNaN(transcript)) 
             {
                 alert("Must input numbers");
                 return false;
+            }else{
+                table_of.value = transcript;
+                recognition.stop();
             }
-
-            console.log(transcript)
-
-            table_of.value = transcript;
         });
-        
-        recognition.start();
-        
-        recognition.addEventListener('end', recognition.start);
     }
    
-
 </script>
 </html>
